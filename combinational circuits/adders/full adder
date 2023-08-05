@@ -1,0 +1,23 @@
+module half_adder(input a,b,c, output reg sum,carry);
+always@(*)
+{carry,sum}=a+b+c;
+endmodule
+
+module tb;
+reg a,b,c; 
+wire sum,carry;
+half_adder h1(a,b,c,sum,carry);
+integer i;
+initial begin
+a=0;b=0;c=0;
+end
+initial begin
+for(i=0;i<8;i=i+1)
+begin
+{a,b,c}=i; 
+#2;
+end
+end 
+initial
+#20 $stop;
+endmodule
