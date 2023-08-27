@@ -65,3 +65,43 @@ module tb;
   end
 
 endmodule
+
+
+-------------------------------------------or--------------------------------------------------
+module fifo(data_in,rst,clk,rd,wr,full,empty,data_out);
+  input [7:0] data_in;
+  input rst,clk,rd,wr;
+  output full,empty;
+  output reg [7:0] data_out;
+  
+  reg [7:0] mem [31:0];
+  reg [4:0] rd_ptr,wr_ptr;
+  
+  always @(posedge clk)
+    begin
+      if(rst) 
+        begin
+        data_out <=0;
+        wr_ptr <=0;
+        rd_ptr <=0;
+   
+        end
+      else
+        begin
+          if(wr==1 && full==0)
+            begin
+              mem[wr_ptr] <=data_in;
+              wr_ptr <= wr_ptr+1;
+            end
+          if(rd==1 && empty==0)
+            begin
+              data_out <=mem[rd_ptr];
+              rd_ptr <=rd_ptr+1;
+            end
+        end
+    end
+  assign full=((wr_ptr-rd_ptr)==31) ? 1:0;
+  assign empty=((wr_ptr-rd_ptr)==0)? 1:0;
+endmodule
+                
+      
